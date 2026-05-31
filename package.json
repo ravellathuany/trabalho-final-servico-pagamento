@@ -1,0 +1,16 @@
+{
+  "name": "servico-pagamento",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "mocha": "^10.2.0"
+  }
+}
