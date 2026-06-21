@@ -1,0 +1,84 @@
+name: CI Pipeline
+
+# Triggers da pipeline
+on:
+  # Dispara a cada push em qualquer branch
+  push:
+    branches: ['**']
+
+  # Permite execução manual via botão na UI do GitHub
+  workflow_dispatch:
+
+  # Executa agendado diariamente às 00:00 UTC
+  schedule:
+    - cron: '0 0 * * *'
+
+# Define permissões para publicação em GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  # Job principal: executar testes e gerar relatório
+  test-and-report:
+    name: Run Tests & Generate Report
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
+      # Instalar dependências
+      - name: Install dependencies
+        run: npm install
+
+      # Executar testes e gerar relatório HTML
+      - name: Run tests with report generation
+        run: npm run test:report
+        continue-on-error: false
+
+      # Upload do relatório como artifact (armazenamento por 30 dias)
+      - name: Upload test report as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ github.run_number }}
+          path: mochawesome-reports/
+          retention-days: 30
+
+      # Upload para GitHub Pages
+      - name: Upload artifact for GitHub Pages deployment
+        if: github.ref == 'refs/heads/main' && always()
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'mochawesome-reports/'
+
+  # Job condicional: deploy do relatório no GitHub Pages
+  deploy-pages:
+    name: Deploy to GitHub Pages
+    needs: test-and-report
+    if: github.ref == 'refs/heads/main' && always()
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      # Deploy usando o action oficial de páginas
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
