@@ -9,9 +9,9 @@ on:
   # Permite execução manual via botão na UI do GitHub
   workflow_dispatch:
 
-  # Executa agendado a cada 5 minutos
+  # Executa agendado diariamente à meia-noite (Manaus/Amazonas - AMT/UTC-4)
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '0 4 * * *'
 
 # Define permissões para publicação em GitHub Pages
 permissions:
