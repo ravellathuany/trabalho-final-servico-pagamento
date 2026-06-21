@@ -396,20 +396,6 @@ permissions:
   id-token: write
 ```
 
-**Princípio do Menor Privilégio:** Workflow recebe apenas permissões necessárias (não tudo).
-
----
-
-## 🎓 Para Aprender Mais
-
-- [GitHub Actions Documentation](https://docs.github.com/en/actions)
-- [Mocha Testing Framework](https://mochajs.org/)
-- [mochawesome Reporter](https://adamgruber.github.io/mochawesome/)
-- [Cron Syntax Reference](https://crontab.guru/)
-- [GitHub Pages](https://pages.github.com/)
-
----
-
 ## ✅ Checklist de Configuração
 
 - [ ] `package.json` atualizado com mochawesome
@@ -426,9 +412,3 @@ permissions:
 ---
 
 **Status:** Pipeline de CI implementada com sucesso! 🚀
-
-Próximas etapas recomendadas:
-1. Faça um push para disparar primeira execução
-2. Verifique Actions tab para status em tempo real
-3. Compartilhe link de GitHub Pages com stakeholders
-4. Configure notificações (opcional) em caso de falhas
